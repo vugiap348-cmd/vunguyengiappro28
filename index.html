@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đề Kiểm Tra Số 29 – Lịch Sử</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--red:#c0392b;--gold:#d4a017;--dark:#1a1208;--paper:#fdf6e3;--ink:#2c1a0e;--muted:#7a6a5a;--green:#27ae60;--blue:#2980b9;--correct-bg:#eafaf1;--wrong-bg:#fdf2f2;--border:#d5c5a1;--shadow:rgba(44,26,14,.13)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Serif 4',Georgia,serif;background:var(--paper);color:var(--ink);min-height:100vh}
+header{background:var(--dark);color:var(--gold);text-align:center;padding:26px 20px 18px;border-bottom:4px solid var(--gold);position:sticky;top:0;z-index:100;box-shadow:0 4px 18px var(--shadow)}
+header h1{font-family:'Playfair Display',serif;font-size:1.55rem;letter-spacing:2px;text-transform:uppercase}
+header p{font-size:.86rem;color:#c9a96e;margin-top:4px}
+#timer-bar{display:flex;align-items:center;justify-content:space-between;background:#231800;padding:10px 24px;position:sticky;top:88px;z-index:99;border-bottom:2px solid var(--gold)}
+#timer-wrap{display:flex;align-items:center;gap:12px}
+#timer-display{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold);letter-spacing:4px;min-width:96px;transition:color .3s}
+#timer-display.urgent{color:#e74c3c;animation:pulse 1s infinite}
+#timer-label{color:#c9a96e;font-size:.78rem;letter-spacing:1px;text-transform:uppercase}
+#progress-text{color:#c9a96e;font-size:.82rem}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+main{max-width:920px;margin:0 auto;padding:28px 18px 80px}
+.section-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--red);border-bottom:2px solid var(--gold);padding-bottom:8px;margin:36px 0 20px;letter-spacing:1px}
+.section-note{background:#fff8e7;border-left:4px solid var(--gold);padding:10px 16px;font-size:.84rem;color:var(--muted);margin-bottom:18px;border-radius:0 6px 6px 0}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:10px;margin-bottom:22px;padding:20px 22px 16px;box-shadow:0 2px 10px var(--shadow);transition:border-color .2s}
+.q-card.answered{border-color:var(--gold)}
+.q-num{font-family:'Playfair Display',serif;font-size:.76rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+.q-text{font-size:.97rem;line-height:1.72;color:var(--ink);margin-bottom:14px;font-weight:600}
+.q-text blockquote{font-style:italic;background:#fdf6e3;border-left:3px solid var(--gold);padding:12px 16px;margin:9px 0 10px;font-weight:400;font-size:.92rem;line-height:1.82;color:#4a3322;border-radius:0 6px 6px 0;white-space:pre-line}
+.source-note{display:block;font-size:.79rem;color:var(--muted);font-style:italic;margin-top:6px;font-weight:400}
+.options{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border:1.5px solid var(--border);border-radius:7px;cursor:pointer;transition:all .18s;background:var(--paper);font-size:.93rem;line-height:1.56}
+.opt:hover{border-color:var(--gold);background:#fffbf0}
+.opt input[type=radio]{margin-top:3px;accent-color:var(--gold);flex-shrink:0}
+.opt.selected{border-color:var(--blue);background:#eef6ff}
+.opt.correct{border-color:var(--green)!important;background:var(--correct-bg)!important;font-weight:600}
+.opt.wrong{border-color:var(--red)!important;background:var(--wrong-bg)!important}
+.tf-table{width:100%;border-collapse:collapse;margin-top:6px}
+.tf-table th{background:var(--dark);color:var(--gold);font-family:'Playfair Display',serif;font-size:.78rem;padding:8px 12px;text-align:center;letter-spacing:.5px}
+.tf-table td{border:1px solid var(--border);padding:10px 12px;font-size:.91rem;vertical-align:top;line-height:1.62}
+.tf-table tr:nth-child(even) td{background:#fdf6e3}
+.tf-radio-group{display:flex;gap:12px;justify-content:center}
+.tf-btn{padding:5px 16px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;font-size:.83rem;font-family:'Source Serif 4',serif;background:var(--paper);transition:all .15s;white-space:nowrap}
+.tf-btn:hover{background:#fffbf0;border-color:var(--gold)}
+.tf-btn.sel-t{background:#eef6ff;border-color:var(--blue);color:var(--blue);font-weight:700}
+.tf-btn.sel-f{background:#fff0f0;border-color:var(--red);color:var(--red);font-weight:700}
+.tf-btn.cr{background:var(--correct-bg)!important;border-color:var(--green)!important;color:var(--green)!important;font-weight:700}
+.tf-btn.wr{background:var(--wrong-bg)!important;border-color:var(--red)!important;color:var(--red)!important}
+#submit-btn{display:block;margin:38px auto 0;padding:15px 56px;background:linear-gradient(135deg,var(--red),#a93226);color:#fff;border:none;border-radius:8px;font-family:'Playfair Display',serif;font-size:1.1rem;letter-spacing:1px;cursor:pointer;box-shadow:0 4px 18px rgba(192,57,43,.35);transition:all .2s}
+#submit-btn:hover{transform:translateY(-2px);box-shadow:0 7px 24px rgba(192,57,43,.45)}
+#submit-btn:disabled{background:var(--muted);cursor:default;transform:none;box-shadow:none}
+.review-mark{display:none;margin-top:10px;padding:7px 12px;border-radius:6px;font-size:.83rem;font-weight:600}
+.review-mark.ok{background:var(--correct-bg);color:var(--green);display:block;border:1px solid var(--green)}
+.review-mark.no{background:var(--wrong-bg);color:var(--red);display:block;border:1px solid var(--red)}
+.review-mark.pt{background:#fff8e7;color:#b7860b;display:block;border:1px solid var(--gold)}
+#modal-overlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(10,6,2,.78);backdrop-filter:blur(7px);align-items:center;justify-content:center;padding:20px}
+#modal-overlay.show{display:flex}
+#modal-confirm{background:#fff;border-radius:18px;max-width:460px;width:100%;box-shadow:0 28px 70px rgba(0,0,0,.38);overflow:hidden;transform:scale(.9) translateY(20px);opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1)}
+#modal-confirm.pop{transform:scale(1) translateY(0);opacity:1}
+.mh{background:var(--dark);padding:22px 28px 18px;text-align:center;border-bottom:3px solid var(--gold)}
+.mh h2{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.28rem;letter-spacing:1px}
+.mh p{color:#c9a96e;font-size:.82rem;margin-top:4px}
+.mb{padding:22px 26px 20px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:18px}
+.stat-box{background:#fdf6e3;border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;text-align:center}
+.stat-box .sv{font-family:'Playfair Display',serif;font-size:1.55rem;color:var(--ink);font-weight:700}
+.stat-box .sl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.stat-box.warn .sv{color:var(--red)}
+.warnbox{background:#fff8e7;border:1.5px solid var(--gold);border-radius:8px;padding:9px 14px;font-size:.83rem;color:#7a5c00;text-align:center;margin-bottom:14px;display:none}
+.warnbox.show{display:block}
+.mbtns{display:flex;gap:11px}
+.btn-back{flex:1;padding:12px;border:2px solid var(--border);border-radius:8px;background:var(--paper);color:var(--ink);font-family:'Source Serif 4',serif;font-size:.92rem;cursor:pointer;transition:all .18s}
+.btn-back:hover{border-color:var(--muted);background:#f5efe0}
+.btn-go{flex:1;padding:12px;border:none;border-radius:8px;background:linear-gradient(135deg,var(--red),#a93226);color:#fff;font-family:'Playfair Display',serif;font-size:.95rem;letter-spacing:.5px;cursor:pointer;transition:all .18s;box-shadow:0 3px 12px rgba(192,57,43,.3)}
+.btn-go:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(192,57,43,.4)}
+#modal-result{background:#fff;border-radius:20px;max-width:580px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.42);overflow:hidden;transform:scale(.88) translateY(40px);opacity:0;transition:all .45s cubic-bezier(.34,1.56,.64,1);display:none}
+#modal-result.pop{transform:scale(1) translateY(0);opacity:1}
+.rhero{background:linear-gradient(140deg,#1a1208 0%,#2c1a0e 55%,#3d2510 100%);padding:38px 28px 30px;text-align:center;position:relative;overflow:hidden}
+.rhero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 75% 25%,rgba(212,160,23,.14) 0%,transparent 58%)}
+.rhero .trophy{font-size:2.8rem;display:block;margin-bottom:8px}
+.rhero h2{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.5rem;position:relative}
+.rscore{font-family:'Playfair Display',serif;font-size:4.4rem;color:#fff;line-height:1;margin:10px 0 5px;position:relative;text-shadow:0 0 30px rgba(212,160,23,.4)}
+.rmax{font-size:1rem;color:#c9a96e;position:relative}
+.rgrade{display:inline-block;margin-top:12px;padding:6px 24px;border-radius:30px;font-size:.87rem;font-weight:600;letter-spacing:.5px;position:relative}
+.g-xs{background:rgba(39,174,96,.25);color:#6ee7a0;border:1px solid rgba(39,174,96,.4)}
+.g-kh{background:rgba(41,128,185,.25);color:#7ec8f0;border:1px solid rgba(41,128,185,.4)}
+.g-tb{background:rgba(212,160,23,.2);color:#f0d070;border:1px solid rgba(212,160,23,.35)}
+.g-ye{background:rgba(192,57,43,.25);color:#f0907a;border:1px solid rgba(192,57,43,.35)}
+.rbody{padding:24px 28px 26px}
+.sctbl{width:100%;border-collapse:collapse;margin-bottom:22px}
+.sctbl th{background:var(--dark);color:var(--gold);font-family:'Playfair Display',serif;font-size:.78rem;padding:9px 14px;text-align:left;letter-spacing:.5px}
+.sctbl td{border:1px solid var(--border);padding:9px 14px;font-size:.9rem}
+.sctbl tr:last-child td{font-weight:700;background:#fdf6e3}
+.rbtns{display:flex;gap:11px}
+.btn-see{flex:1;padding:13px;border:2px solid var(--border);border-radius:9px;background:var(--paper);color:var(--ink);font-family:'Source Serif 4',serif;font-size:.92rem;cursor:pointer;transition:all .18s}
+.btn-see:hover{border-color:var(--gold);background:#fffbf0}
+.btn-redo{flex:1;padding:13px;border:1.5px solid var(--gold);border-radius:9px;background:linear-gradient(135deg,var(--dark),#3d2510);color:var(--gold);font-family:'Playfair Display',serif;font-size:.95rem;letter-spacing:.5px;cursor:pointer;transition:all .2s;box-shadow:0 3px 14px rgba(26,18,8,.3)}
+.btn-redo:hover{background:linear-gradient(135deg,#2c1a0e,#523020);transform:translateY(-1px)}
+.cf{position:fixed;border-radius:2px;animation:fall 2.2s ease-in forwards;pointer-events:none;z-index:10000}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(105vh) rotate(720deg);opacity:0}}
+@media(max-width:600px){header h1{font-size:1.1rem}#timer-display{font-size:1.5rem}.rscore{font-size:3rem}}
+</style>
+</head>
+<body>
+<header>
+<h1>📜 Đề Kiểm Tra Số 29 — Lịch Sử</h1>
+<p>Trắc nghiệm một lựa chọn &amp; Đúng / Sai · Thời gian: 45 phút</p>
+</header>
+<div id="timer-bar">
+<div id="timer-wrap">
+<div><div id="timer-label">⏱ Thời gian còn lại</div><div id="timer-display">45:00</div></div>
+</div>
+<span id="progress-text">0 / 40 ý đã làm</span>
+</div>
+<main>
+<div class="section-title">PHẦN I — Trắc nghiệm một lựa chọn (24 câu × 0.25 điểm)</div>
+<div class="section-note">Mỗi câu chỉ chọn <strong>một</strong> phương án đúng nhất.</div>
+<div id="p1"></div>
+<div class="section-title">PHẦN II — Đúng / Sai (4 câu × 1.0 điểm)</div>
+<div class="section-note">Mỗi ý a, b, c, d chọn <strong>Đúng</strong> hoặc <strong>Sai</strong>. Thang điểm: 1 ý = 0.1đ · 2 ý = 0.25đ · 3 ý = 0.5đ · 4 ý = 1.0đ</div>
+<div id="p2"></div>
+<button id="submit-btn" onclick="openConfirm()">📩 NỘP BÀI</button>
+</main>
+<div id="modal-overlay">
+<div id="modal-confirm">
+<div class="mh"><h2>📋 Xác nhận nộp bài</h2><p>Kiểm tra lại trước khi nộp</p></div>
+<div class="mb">
+<div class="stat-grid">
+<div class="stat-box" id="sb1"><div class="sv" id="sv1">0/24</div><div class="sl">Phần I đã làm</div></div>
+<div class="stat-box" id="sb2"><div class="sv" id="sv2">0/16</div><div class="sl">Phần II đã làm</div></div>
+<div class="stat-box"><div class="sv" id="sv-time">—</div><div class="sl">Thời gian còn lại</div></div>
+<div class="stat-box" id="sb-empty"><div class="sv" id="sv-empty">0</div><div class="sl">Ý chưa trả lời</div></div>
+</div>
+<div class="warnbox" id="warnbox">⚠ Còn <strong id="warn-n"></strong> ý chưa trả lời. Nộp bài sẽ tính 0 điểm cho các ý đó.</div>
+<div class="mbtns">
+<button class="btn-back" onclick="closeModal()">← Làm tiếp</button>
+<button class="btn-go" onclick="doSubmit()">Nộp bài ngay ✓</button>
+</div>
+</div>
+</div>
+<div id="modal-result">
+<div class="rhero">
+<span class="trophy">🏆</span>
+<h2>Kết quả bài kiểm tra</h2>
+<div class="rscore" id="rscore">0.00</div>
+<div class="rmax">/ 10.0 điểm</div>
+<span class="rgrade" id="rgrade"></span>
+</div>
+<div class="rbody">
+<table class="sctbl">
+<thead><tr><th>Thành phần</th><th>Điểm đạt</th><th>Tối đa</th></tr></thead>
+<tbody id="sc-tbody"></tbody>
+</table>
+<div class="rbtns">
+<button class="btn-see" onclick="closeModal()">🔍 Xem đáp án</button>
+<button class="btn-redo" onclick="redoQuiz()">🔄 Làm lại bài</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+const P1=[
+{id:'q1',text:'Những cải cách về quân sự của Hồ Quý Ly có tác dụng như thế nào đối với tình hình đất nước cuối thế kỷ XIV đầu thế kỷ XV?',opts:['Tăng cường sức mạnh nhằm phòng thủ đất nước.','Góp phần đánh bại cuộc xâm lược của nhà Minh.','Xây dựng thành công thế trận quốc phòng toàn dân.','Củng cố, duy trì khối đại đoàn kết toàn dân tộc.'],answer:0},
+{id:'q2',text:'Nội dung nào sau đây là đúng về tầm quan trọng của vùng biển quanh hai quần đảo Trường Sa và Hoàng Sa trong quá trình phát triển kinh tế biển của Việt Nam?',opts:['Là ngư trường lớn với nhiều hải sản quý.','Có nhiều hải cảng thuận lợi tránh trú bão.','Tạo ra thế trận phòng thủ từ sớm, từ xa.','Là nơi tranh chấp về chủ quyền quyết liệt.'],answer:0},
+{id:'q3',text:'Nội dung nào sau đây phản ánh đúng chính sách về giáo dục trong cuộc cải cách của Hồ Quý Ly cuối thế kỷ XIV đầu thế kỷ XV?',opts:['Đổi mới chế độ thuế khóa, ban hành chính sách hạn điền, hạn nô.','Mở rộng giáo dục địa phương, đặt chức học quan, cấp học điền.','Chấn chỉnh lại Phật giáo và Nho giáo, thải hồi bớt các tăng đạo.','Lập sổ hộ tịch, tổ chức lại phiên chế quân đội, chế thêm vũ khí.'],answer:1},
+{id:'q4',text:'Quân cảng nào sau đây có vị trí quan trọng chiến lược trong việc bảo vệ chủ quyền trên biển Đông của Việt Nam hiện nay?',opts:['Cam Ranh.','Vân Đồn.','Vàm Lũng.','Vũng Rô.'],answer:0},
+{id:'q5',text:'Những quốc gia nào sau đây là các trung tâm quyền lực đang vươn lên sau khi trật tự thế giới hai cực Ianta sụp đổ?',opts:['Xin-ga-po và Nam Phi.','Trung Quốc và Ấn Độ.','Hà Lan và Bồ Đào Nha.','Tây Ban Nha và Mông Cổ.'],answer:1},
+{id:'q6',text:'Nội dung nào sau đây là một trong những trụ cột của việc xây dựng sức mạnh quốc gia tổng hợp sau Chiến tranh lạnh?',opts:['Một nền thương mại phát triển.','Một nền công nghệ trình độ cao.','Một liên minh quân sự hùng mạnh.','Một lực lượng lao động đông đảo.'],answer:1},
+{id:'q7',text:'Nội dung nào sau đây là mục đích thành lập của tổ chức Hiệp hội các quốc gia Đông Nam Á (ASEAN)?',opts:['Phấn đấu để Đông Nam Á trở thành khu vực hòa bình, tự do, thịnh vượng.','Đẩy mạnh liên minh chính trị, kinh tế, quân sự giữa các nước trong khu vực.','Tạo điều kiện đưa các quốc gia thành viên trở thành những con rồng kinh tế.','Đẩy mạnh quá trình liên kết trên tất cả các lĩnh vực giữa các nước thành viên.'],answer:0},
+{id:'q8',text:'Nội dung nào sau đây không phải là lí do thành lập của tổ chức Hiệp hội các quốc gia Đông Nam Á (ASEAN)?',opts:['Ảnh hưởng của Trung Quốc ở khu vực Biển Đông.','Nhu cầu liên kết, hợp tác cùng nhau phát triển.','Hạn chế ảnh hưởng của các cường quốc bên ngoài.','Tác động của cuộc cách mạng khoa học – kĩ thuật.'],answer:0},
+{id:'q9',text:'Sau Chiến tranh thế giới thứ hai, mâu thuẫn giữa Mỹ và Liên Xô ngày càng gay gắt vì nguyên nhân nào sau đây?',opts:['Phân chia phạm vi ảnh hưởng không đồng đều.','Mâu thuẫn về mục tiêu và chiến lược phát triển.','Liên Xô chưa trả xong các khoản nợ chiến tranh.','Mỹ ủng hộ các nước phát xít tiến hành chiến tranh.'],answer:1},
+{id:'q10',text:'Nội dung nào sau đây phản ánh đúng lý do Mỹ tăng cường viện trợ cho Pháp trong cuộc chiến tranh xâm lược Việt Nam (1945 – 1954)?',opts:['Giúp Pháp kéo dài và mở rộng cuộc chiến tranh xâm lược.','Hỗ trợ và lôi kéo Pháp tham gia vào chiến tranh thế giới.','Nhằm bảo vệ hệ thống thuộc địa rộng lớn của Mỹ ở Châu Á.','Biến miền Nam Việt Nam thành thuộc địa kiểu mới của Mỹ.'],answer:0},
+{id:'q11',text:'Nội dung nào sau đây là mục đích của Pháp-Mỹ khi quyết định thực hiện bản Kế hoạch Navarre ở Việt Nam?',opts:['Chuẩn bị mở cuộc tấn công lên Việt Bắc.','Kết thúc cuộc chiến tranh trong danh dự.','Tìm một giải pháp chính trị ở Nam Bộ.','Cầm cự, tiêu hao Việt Minh ở đồng bằng.'],answer:1},
+{id:'q12',text:'Nội dung nào sau đây phản ánh đúng về âm mưu sâu xa của Mỹ khi can thiệp ngày càng sâu vào cuộc chiến tranh Đông Dương?',opts:['Hỗ trợ Pháp tiến hành chiến tranh đến thắng lợi cuối cùng.','Gạt bỏ ảnh hưởng của Liên Xô và Trung Quốc ở Việt Nam.','Tạo thành gọng kìm để tiến công Trung Quốc từ phía Nam.','Gạt bỏ ảnh hưởng của Pháp nhằm độc chiếm Đông Dương.'],answer:3},
+{id:'q13',text:'Thành phần kinh tế nào sau đây giữ vai trò chủ đạo trong nền kinh tế Việt Nam từ sau khi Đảng Cộng sản Việt Nam tiến hành công cuộc Đổi mới đất nước?',opts:['Tư nhân.','Nhà nước.','Tập thể.','Nước ngoài.'],answer:1},
+{id:'q14',text:'Nội dung nào sau đây phản ánh đúng nguyên nhân "trong giai đoạn đầu của thời kì đổi mới (1986 - 1990), Đảng Cộng sản Việt Nam chủ trương thực hiện Ba chương trình kinh tế lớn"?',opts:['Giải quyết trước hết các nhu cầu thiết yếu cho nhân dân.','Phát triển kinh tế đối ngoại nhằm hợp tác sâu rộng hơn.','Xóa bỏ hoàn toàn cơ chế tập trung, quan liêu, bao cấp.','Tận dụng lợi thế về tài nguyên thiên nhiên để xuất khẩu.'],answer:0},
+{id:'q15',text:'Trong thời gian hoạt động tại Trung Quốc (1912), Phan Bội Châu tham gia thành lập tổ chức nào sau đây?',opts:['Việt Nam Quốc Dân Đảng.','Đông Á đồng minh.','Việt Nam Quang phục hội.','Hội Liên hiệp thuộc địa.'],answer:2},
+{id:'q16',text:'Nội dung nào sau đây phản ánh không đúng hoạt động đối ngoại của Phan Bội Châu những năm đầu thế kỉ XIX?',opts:['Thành lập Hội Liên hiệp các dân tộc thuộc địa.','Đưa 200 thanh niên Việt Nam sang Nhật Bản học tập.','Tham gia thành lập tổ chức Đông Á đồng minh.','Tham gia thành lập tổ chức Chấn Hoa hưng quốc.'],answer:0},
+{id:'q17',text:'Trong thời gian hoạt động tại Pháp (1920), Nguyễn Ái Quốc tham gia sáng lập tổ chức nào sau đây?',opts:['Đảng Cộng sản Pháp.','Đảng Cộng sản Liên Xô.','Việt Nam Quang phục hội.','Tân Việt Cách mạng đảng.'],answer:0},
+{id:'q18',text:'Tháng 11-2006, Bộ Chính trị Ban Chấp hành Trung ương Đảng Cộng sản Việt Nam đã ban hành Chỉ thị số 06-CT/TW, tổ chức cuộc vận động "Học tập và làm theo tấm gương đạo đức Hồ Chí Minh" nhằm',opts:['phát huy giá trị to lớn của tư tưởng, đạo đức Hồ Chí Minh.','thúc đẩy sự phát triển nhanh chóng của nền kinh tế thị trường.','xây dựng cơ sở hạ tầng giao thông đồng bộ và hiện đại.','cải thiện hệ thống giáo dục và đào tạo, nâng cao dân trí.'],answer:0},
+{id:'q19',text:'Thành phố nào sau đây là địa danh đầu tiên trên thế giới có đường phố mang tên Hồ Chí Minh và dựng tượng đồng Hồ Chí Minh?',opts:['Quảng Châu (Trung Quốc).','Mê-hi-cô (Mê-hi-cô).','U-li-a-nốp-xcơ (Liên bang Nga).','Côn-ca-ta (Ấn Độ).'],answer:3},
+{id:'q20',text:'Chủ tịch Hồ Chí Minh "sống mãi" trong lòng nhân dân Việt Nam vì đã',opts:['cống hiến và hi sinh cả cuộc đời cho dân tộc Việt Nam.','để lại di sản to lớn trên lĩnh vực khoa học-kĩ thuật.','để lại di sản to lớn trên lĩnh vực văn học và nghệ thuật.','huy động mọi nguồn lực để giúp đỡ người dân Việt Nam.'],answer:0},
+{id:'q21',text:'Nhận xét nào sau đây là tác động của Hội nghị I-an-ta và Hội nghị Pốt-xđam (1945) đối với tình hình quốc tế?',opts:['Làm thay đổi sâu sắc quan hệ quốc tế, đặc biệt là quan hệ Xô - Mỹ.','Giải quyết được mâu thuẫn về vấn đề thị trường cho các cường quốc.','Tạo nên khuôn khổ của trật tự thế giới – trật tự nhất siêu, nhiều cực.','Tạo nên một trật tự thế giới mới giữa các nước thắng trận và bại trận.'],answer:0},
+{id:'q22',text:'Từ sự thành công trong phát triển kinh tế của nhóm 5 nước sáng lập ASEAN, Việt Nam có thể rút ra bài học kinh nghiệm gì để phát triển đất nước?',opts:['Dựa vào quân sự để phát triển đất nước.','Sẵn sàng nhận viện trợ của tất cả các nước.','Đẩy mạnh ứng dụng khoa học - kĩ thuật.','Thực hiện đường lối đối ngoại trung lập.'],answer:2},
+{id:'q23',text:'Nhận xét nào là đúng về cuộc Tổng khởi nghĩa giành chính quyền tháng Tám năm 1945 ở Việt Nam?',opts:['Diễn ra gấp rút để đẩy lùi những nguy cơ lớn đối với cách mạng Việt Nam.','Diễn ra trong điều kiện những nguy cơ uy hiếp cách mạng đã được đẩy lùi.','Diễn ra trên cả nước, khởi nghĩa ở nông thôn có vai trò quyết định thắng lợi.','Diễn ra nhanh chóng trong điều kiện hoàn toàn có lợi cho cách mạng Việt Nam.'],answer:0},
+{id:'q24',text:'Nhận định nào sau đây phản ánh đúng mục đích hoạt động của Hội Liên hiệp thuộc địa được Nguyễn Ái Quốc tham gia sáng lập tại Pháp (1921)?',opts:['Đoàn kết các lực lượng cách mạng chống chủ nghĩa thực dân.','Liên minh với các nước tư bản để chống chủ nghĩa thực dân.','Lãnh đạo phong trào công nhân ở các nước tư bản phương Tây.','Đào tạo thanh niên ở các nước thuộc địa đưa về nước hoạt động.'],answer:0}
+];
+
+const P2=[
+{id:'p2q1',intro:'Cho những thông tin trong bảng sau đây:',table:[
+{time:'Đợt 1: từ ngày 13 – 3 đến ngày 17 – 3 – 1954',act:'Quân ta tiến công cụm cứ điểm Him Lam và đồi Độc Lập, bức hàng cứ điểm Bản Kéo.'},
+{time:'Đợt 2: từ ngày 30 – 3 đến ngày 26 – 4 – 1954',act:'Quân ta tiến công các cứ điểm phía đông phân khu Trung tâm; tiến công và kiểm soát sân bay Mường Thanh, hạn chế việc tiếp viện của quân Pháp.'},
+{time:'Đợt 3: từ ngày 1 – 5 đến ngày 7 – 5 – 1954',act:'Quân ta đồng loạt tiến công phân khu Trung tâm và phân khu Nam. Đến 17 giờ 30 ngày 7 – 5, tướng Đờ Ca-xtơ-ri cùng toàn bộ Bộ Tham mưu của Pháp phải đầu hàng.'}
+],subs:[
+{label:'a',text:'Tư liệu đề cập đến những diễn biến chính của chiến dịch Điện Biên Phủ trong cuộc kháng chiến chống Pháp.',answer:true},
+{label:'b',text:'Chiến dịch Điện Biên Phủ trải qua ba đợt, là chiến dịch tiến công lớn đầu tiên của bộ đội chủ lực Việt Nam.',answer:false},
+{label:'c',text:'Chiến dịch Điện Biên Phủ thắng lợi đã đập tan hoàn toàn kế hoạch Nava, buộc Pháp ký Hiệp định Giơ ne vơ.',answer:true},
+{label:'d',text:'Với chiến dịch Điện Biên Phủ, cuộc kháng chiến chống Pháp đã kết thúc, miền Bắc hoàn toàn giải phóng.',answer:false}
+]},
+{id:'p2q2',intro:'Cho đoạn tư liệu sau đây:',quote:`"Đế quốc Mỹ và chính quyền Sài Gòn do Ngô Đình Diệm đứng đầu đã trắng trợn phá bỏ Hiệp định Giơ-ne-vơ, thẳng tay đàn áp, khủng bố, mở các chiến dịch "tố cộng, diệt cộng" bằng cái gọi là sức mạnh của Quân lực Cộng hoà...Để bảo vệ sinh mạng và quyền lợi cơ bản của mình, nhân dân miền Nam dưới sự lãnh đạo của Đảng không có con đường nào khác là phải đứng lên đánh đổ chế độ độc tài phát xít của Mỹ và tay sai, giải phóng hoàn toàn miền Nam, thực hiện thống nhất nước nhà".`,source:'(Lê Mậu Hãn, Sức mạnh dân tộc của cách mạng Việt Nam dưới ánh sáng tư tưởng Hồ Chí Minh, NXB Chính trị Quốc gia, Hà Nội, 2017, tr.294)',subs:[
+{label:'a',text:'Tư liệu đề cập đến tình hình miền Nam sau Hiệp định Giơ ne vơ về chấm dứt chiến tranh, lập lại hòa bình ở Việt Nam.',answer:false},
+{label:'b',text:'Sau Hiệp định Giơ ne vơ, do sự phá hoại của Mỹ - Diệm, cuộc cách mạng giải phóng dân tộc ở miền Nam Việt Nam vẫn tiếp tục.',answer:true},
+{label:'c',text:'Dưới sự lãnh đạo của Đảng, nhân dân miền Nam đã tổ chức phong trào đồng khởi, lật đổ thành công chính quyền tay sai Ngô Đình Diệm.',answer:false},
+{label:'d',text:'Cách mạng miền Nam Việt Nam sau 1954 cho thấy, việc sử dụng bạo lực cách mạng cần được tổ chức và chuẩn bị lâu dài, chu đáo.',answer:true}
+]},
+{id:'p2q3',intro:'Cho đoạn tư liệu sau đây:',quote:`"... Luận cương của Lê-nin làm cho tôi rất cảm động, phấn khởi, sáng tỏ, tin tưởng biết bao! Tôi vui mừng đến phát khóc lên. Ngồi một mình trong buồng mà tôi nói to lên như đang nói trước quần chúng đông đảo: "Hỡi đồng bào bị đọa đày đau khổ! Đây là cái cần thiết cho chúng ta, đây là con đường giải phóng chúng ta!". Từ đó tôi hoàn toàn tin theo Lê-nin, tin theo Quốc tế thứ ba".`,source:'(Hồ Chí Minh, Con đường dẫn tôi đến chủ nghĩa Mác-Lê-nin, trích trong: Hồ Chí Minh, Toàn tập, Tập 12, NXB Chính trị Quốc gia Sự thật, Hà Nội, 2011, tr.562)',subs:[
+{label:'a',text:'Tư liệu đề cập đến sự kiện Nguyễn Ái Quốc tiếp cận với chủ nghĩa Mác – Lenin và tìm ra con đường cứu nước mới cho dân tộc.',answer:true},
+{label:'b',text:'Sự kiện tìm ra con đường cứu nước mới của Nguyễn Ái Quốc là kết quả của một quá trình tìm hiểu, khảo sát và lựa chọn.',answer:true},
+{label:'c',text:'Với sự kiện Nguyễn Ái Quốc đọc Luận cương Lê nin, cách mạng Việt Nam chấm dứt thời kỳ khủng hoảng về đường lối và giai cấp lãnh đạo.',answer:false},
+{label:'d',text:'Con đường cách mạng vô sản mà Nguyễn Ái Quốc lựa chọn là kết quả của quá trình sàng lọc nghiêm khắc của lịch sử dân tộc Việt Nam.',answer:true}
+]},
+{id:'p2q4',intro:'Cho đoạn tư liệu sau đây:',quote:`"Trong thời kỳ hội nhập quốc tế sâu rộng, các tổ chức quần chúng tổ chức nhân dân Việt Nam đã chủ động và tích cực mở rộng tăng cường quan hệ hòa bình hữu nghị hợp tác với nhân dân thế giới và có những đóng góp quan trọng cho công cuộc xây dựng và phát triển đất nước. Cho đến nay các tổ chức chính trị xã hội các tổ chức nhân dân Việt Nam đã thiết lập quan hệ hữu nghị hợp tác với hàng nghìn tổ chức đối tác và cá nhân trên thế giới công tác đối ngoại nhân dân đã đóng góp rất tích cực đối với việc tăng cường quan hệ hữu nghị Việt Nam với các nước với các nước láng giềng chung biên giới như Trung Quốc, Lào, Cam-pu-chia và các nước Hiệp hội các quốc gia Đông Nam Á (ASEAN)…"`,source:'(Trích Tạp chí Cộng sản số 1016, Tháng 6-2023)',subs:[
+{label:'a',text:'Tư liệu đề cập đến quan hệ đối ngoại của Việt Nam thời kỳ tiến hành công cuộc đổi mới đất nước toàn diện và đồng bộ.',answer:true},
+{label:'b',text:'Trong quan hệ đối ngoại, hội nhập quốc tế, Việt Nam chỉ chú trọng quan hệ với các nước láng giềng và tổ chức ASEAN.',answer:false},
+{label:'c',text:'Trong quá trình hội nhập quốc tế, công tác đối ngoại nhân dân được tiến hành cùng với công tác đối ngoại Đảng và nhà nước.',answer:true},
+{label:'d',text:'Việt Nam là quốc gia đầu tiên trên thế giới tiến hành công tác đối ngoại nhân dân nhằm phục vụ cho mục tiêu phát triển.',answer:false}
+]}
+];
+
+let p1q=[],p2q=[],ans1={},ans2={},tmr=null,secs=2700,done=false;
+const $=id=>document.getElementById(id);
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=0|Math.random()*(i+1);[b[i],b[j]]=[b[j],b[i]]}return b}
+function fmt(s){return`${String(0|s/60).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`}
+function mk(tag,cls='',props={}){const e=document.createElement(tag);if(cls)e.className=cls;return Object.assign(e,props)}
+function buildP1(){return shuffle(P1).map(q=>{const si=shuffle([0,1,2,3]);return{...q,opts:si.map(i=>q.opts[i]),answer:si.indexOf(q.answer)}})}
+function buildP2(){return shuffle(P2)}
+function renderP1(){
+const c=$('p1');c.innerHTML='';const L=['A','B','C','D'];
+p1q.forEach((q,i)=>{
+const card=mk('div','q-card',{id:'c1-'+q.id});
+card.innerHTML=`<div class="q-num">Câu ${i+1} / 24</div><div class="q-text">${q.text}</div><div class="options" id="o-${q.id}"></div><div class="review-mark" id="rm1-${q.id}"></div>`;
+c.appendChild(card);const ob=$('o-'+q.id);
+q.opts.forEach((txt,oi)=>{
+const lbl=mk('label','opt',{id:`lo-${q.id}-${oi}`});
+lbl.innerHTML=`<input type="radio" name="${q.id}" value="${oi}"><span><strong>${L[oi]}.</strong> ${txt}</span>`;
+lbl.querySelector('input').onchange=()=>{ans1[q.id]=oi;document.querySelectorAll(`[id^="lo-${q.id}-"]`).forEach(l=>l.classList.remove('selected'));lbl.classList.add('selected');card.classList.add('answered');upProg()};
+ob.appendChild(lbl);
+});
+});
+}
+function renderP2(){
+const c=$('p2');c.innerHTML='';
+p2q.forEach((q,qi)=>{
+const card=mk('div','q-card',{id:'c2-'+q.id});
+card.appendChild(Object.assign(mk('div','q-num'),{textContent:`Câu ${qi+1} / 4 (Phần II)`}));
+const qt=mk('div','q-text');qt.appendChild(Object.assign(mk('span'),{textContent:q.intro}));
+if(q.table){
+const tbl=mk('table');tbl.style.cssText='width:100%;border-collapse:collapse;margin:10px 0 8px;font-size:.88rem';
+tbl.innerHTML='<thead><tr style="background:#1a1208;color:#d4a017"><th style="padding:8px 12px;border:1px solid #d5c5a1;text-align:left;white-space:nowrap">Thời gian</th><th style="padding:8px 12px;border:1px solid #d5c5a1;text-align:left">Sự kiện</th></tr></thead>';
+const tb=mk('tbody');
+q.table.forEach((r,ri)=>{
+const tr=mk('tr');tr.style.background=ri%2?'#fdf6e3':'#fff';
+tr.innerHTML=`<td style="padding:8px 12px;border:1px solid #d5c5a1;font-weight:600;vertical-align:top">${r.time}</td><td style="padding:8px 12px;border:1px solid #d5c5a1">${r.act}</td>`;
+tb.appendChild(tr);
+});
+tbl.appendChild(tb);qt.appendChild(tbl);
+}
+if(q.quote){const bq=mk('blockquote');bq.textContent=q.quote;qt.appendChild(bq)}
+if(q.source){qt.appendChild(Object.assign(mk('span','source-note'),{textContent:q.source}))}
+card.appendChild(qt);
+const tbl2=mk('table','tf-table');
+tbl2.innerHTML='<thead><tr><th style="width:36px">Ý</th><th>Nội dung</th><th style="width:174px">Chọn đáp án</th></tr></thead>';
+const tb2=mk('tbody');
+q.subs.forEach(sub=>{
+const key=q.id+'-'+sub.label;const tr=mk('tr');
+const tl=mk('td');tl.style.cssText='text-align:center;font-weight:700;font-family:Playfair Display,serif';tl.textContent=sub.label+')';
+const tt=mk('td');tt.textContent=sub.text;
+const td=mk('td');td.style.textAlign='center';
+const bT=mk('button','tf-btn',{id:`tf-${key}-T`,textContent:'✔ Đúng'});
+const bF=mk('button','tf-btn',{id:`tf-${key}-F`,textContent:'✘ Sai'});
+bT.onclick=()=>selTF(key,true,q.id);bF.onclick=()=>selTF(key,false,q.id);
+const g=mk('div','tf-radio-group');g.appendChild(bT);g.appendChild(bF);td.appendChild(g);tr.append(tl,tt,td);tb2.appendChild(tr);
+});
+tbl2.appendChild(tb2);card.appendChild(tbl2);
+card.appendChild(mk('div','review-mark',{id:'rm2-'+q.id}));c.appendChild(card);
+});
+}
+function selTF(key,val,qId){ans2[key]=val;const T=$(`tf-${key}-T`),F=$(`tf-${key}-F`);T.className='tf-btn'+(val===true?' sel-t':'');F.className='tf-btn'+(val===false?' sel-f':'');upProg();const q=p2q.find(x=>x.id===qId);if(q&&q.subs.every(s=>ans2[qId+'-'+s.label]!==undefined))$('c2-'+qId)?.classList.add('answered')}
+function upProg(){const d=Object.keys(ans1).length+Object.keys(ans2).length;$('progress-text').textContent=`${d} / 40 ý đã làm`}
+function startTimer(){secs=2700;tmr=setInterval(()=>{secs--;$('timer-display').textContent=fmt(secs);if(secs<=300)$('timer-display').classList.add('urgent');if(secs<=0){clearInterval(tmr);if(!done)autoSub()}},1000)}
+function autoSub(){done=true;$('submit-btn').disabled=true;document.querySelectorAll('input[type=radio]').forEach(i=>i.disabled=true);const{s1,s2,d2}=calcScore();applyReview(s1,s2,d2);fillResult(s1,s2,d2);showModal('modal-result')}
+function openConfirm(){if(done)return;const d1=Object.keys(ans1).length,d2=Object.keys(ans2).length,empty=(24-d1)+(16-d2);$('sv1').textContent=`${d1}/24`;$('sv2').textContent=`${d2}/16`;$('sv-time').textContent=fmt(secs);$('sv-empty').textContent=empty;$('sb-empty').className='stat-box'+(empty>0?' warn':'');const wb=$('warnbox');if(empty>0){$('warn-n').textContent=empty+' ý';wb.classList.add('show')}else wb.classList.remove('show');showModal('modal-confirm')}
+function closeModal(){$('modal-overlay').classList.remove('show');$('modal-confirm').classList.remove('pop');$('modal-result').classList.remove('pop')}
+function showModal(id){$('modal-confirm').style.display=id==='modal-confirm'?'block':'none';$('modal-result').style.display=id==='modal-result'?'block':'none';$('modal-overlay').classList.add('show');setTimeout(()=>$(id).classList.add('pop'),20)}
+function doSubmit(){if(done)return;done=true;clearInterval(tmr);$('submit-btn').disabled=true;document.querySelectorAll('input[type=radio]').forEach(i=>i.disabled=true);$('modal-confirm').classList.remove('pop');setTimeout(()=>{const{s1,s2,d2}=calcScore();applyReview(s1,s2,d2);fillResult(s1,s2,d2);showModal('modal-result')},260)}
+function redoQuiz(){done=false;ans1={};ans2={};clearInterval(tmr);closeModal();$('submit-btn').disabled=false;$('timer-display').classList.remove('urgent');$('timer-display').style.color='';p1q=buildP1();p2q=buildP2();renderP1();renderP2();upProg();startTimer();window.scrollTo({top:0,behavior:'smooth'})}
+function calcScore(){let s1=0;p1q.forEach(q=>{if(ans1[q.id]===q.answer)s1+=.25});let s2=0;const d2={};p2q.forEach(q=>{let c=0;q.subs.forEach(s=>{if(ans2[q.id+'-'+s.label]===s.answer)c++});d2[q.id]=c;s2+=c===4?1:c===3?.5:c===2?.25:c===1?.1:0});return{s1,s2,d2}}
+function applyReview(s1,s2,d2){const L=['A','B','C','D'];p1q.forEach(q=>{const ua=ans1[q.id];q.opts.forEach((_,oi)=>{const l=$(`lo-${q.id}-${oi}`);if(!l)return;l.classList.remove('selected');if(oi===q.answer)l.classList.add('correct');else if(oi===ua&&ua!==q.answer)l.classList.add('wrong')});const rm=$('rm1-'+q.id);if(!rm)return;if(ua===q.answer){rm.className='review-mark ok';rm.textContent=`✔ Đúng — Đáp án: ${L[q.answer]}`}else if(ua===undefined){rm.className='review-mark no';rm.textContent=`⚠ Chưa trả lời — Đáp án đúng: ${L[q.answer]}`}else{rm.className='review-mark no';rm.textContent=`✘ Sai — Bạn chọn: ${L[ua]} | Đáp án đúng: ${L[q.answer]}`}});p2q.forEach(q=>{const c=d2[q.id];q.subs.forEach(sub=>{const key=q.id+'-'+sub.label,ua=ans2[key];const T=$(`tf-${key}-T`),F=$(`tf-${key}-F`);if(T)T.className='tf-btn';if(F)F.className='tf-btn';if(sub.answer){if(T)T.classList.add('cr')}else{if(F)F.classList.add('cr')}if(ua!==undefined&&ua!==sub.answer){if(ua){if(T)T.classList.add('wr')}else{if(F)F.classList.add('wr')}}});const qs=c===4?1:c===3?.5:c===2?.25:c===1?.1:0;const rm=$('rm2-'+q.id);if(!rm)return;if(c===4){rm.className='review-mark ok';rm.textContent='✔ Hoàn toàn đúng — +1.0 điểm'}else if(c===0){rm.className='review-mark no';rm.textContent='✘ Không có ý nào đúng — +0 điểm'}else{rm.className='review-mark pt';rm.textContent=`◑ Đúng ${c}/4 ý — +${qs.toFixed(2)} điểm`}})}
+function fillResult(s1,s2,d2){const tot=+(s1+s2).toFixed(2);$('rscore').textContent=tot.toFixed(2);const g=$('rgrade');if(tot>=8){g.textContent='🏆 Xuất sắc';g.className='rgrade g-xs'}else if(tot>=6.5){g.textContent='👍 Khá';g.className='rgrade g-kh'}else if(tot>=5){g.textContent='📘 Trung bình';g.className='rgrade g-tb'}else{g.textContent='📖 Cần cố gắng';g.className='rgrade g-ye'}$('sc-tbody').innerHTML=`<tr><td>Phần I (24 câu × 0.25đ)</td><td>${s1.toFixed(2)} đ</td><td>6.00 đ</td></tr><tr><td>Phần II (4 câu)</td><td>${s2.toFixed(2)} đ</td><td>4.00 đ</td></tr><tr><td><strong>Tổng cộng</strong></td><td><strong>${tot.toFixed(2)} đ</strong></td><td><strong>10.00 đ</strong></td></tr>`;if(tot>=6.5)confetti()}
+function confetti(){const cols=['#d4a017','#c0392b','#27ae60','#2980b9','#f39c12','#8e44ad','#e67e22'];for(let i=0;i<65;i++){const e=document.createElement('div');e.className='cf';const sz=6+Math.random()*9;e.style.cssText=`left:${Math.random()*100}vw;top:-20px;width:${sz}px;height:${sz}px;background:${cols[0|Math.random()*cols.length]};border-radius:${Math.random()>.5?'50%':'2px'};animation-delay:${Math.random()*1.3}s;animation-duration:${1.8+Math.random()*.9}s`;document.body.appendChild(e);setTimeout(()=>e.remove(),3600)}}
+window.addEventListener('DOMContentLoaded',()=>{p1q=buildP1();p2q=buildP2();renderP1();renderP2();upProg();startTimer()});
+</script>
+</body>
+</html>
